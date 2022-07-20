@@ -12,7 +12,7 @@ void loop(){
     if(val == LOW){
         delay(ButtonDelay);
         while(digitalRead(BUTTON_Pin) == LOW)
-            //;                                   //等待放開按鍵
+            ;                                   //等待放開按鍵
         LED_State = !LED_State;
         digitalWrite(LED_Pin, LED_State);
     }
