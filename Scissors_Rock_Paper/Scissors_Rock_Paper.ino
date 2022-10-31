@@ -9,9 +9,9 @@ int paper = 13;
 
 // LCD
 #include <LiquidCrystal_I2C.h>
-LiquidCrystal_I2C lcd(0x27, 16, 2); // set the LCD address to 0x27 for a 16 chars and 2 line display
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-// option 1
+// 選項 1 --> 猜拳
 void SRP(){
   int bot_input = random() % 3 + 1; // 1=scissors,2=rock,3=paper
   int player_input;
@@ -71,9 +71,7 @@ void SRP(){
       outcome = "withdraw";
     }
   }
-
   //表示結果, 讀outcome 使用蜂鳴器，LED
-
   String name[] = {"Scissors", "rock", "Paper"};
 
   if (outcome == "win"){
@@ -113,23 +111,25 @@ void SRP(){
     digitalWrite(yellow, LOW);
   }
   lcd.clear();
-  //  lcd.setCursor(1,2);
-  //  lcd.print("bot_input: ");
-  //  lcd.print(name[bot_input-1]);
-  //  lcd.setCursor(0,0);//1,3
-  //  lcd.print("outcome:");
-  //  lcd.print(outcome);
-  // delay((1000));
   noTone(SPEAKER_PIN);
 }
 
-// option 2
-
-// option 3
-
-// option 4
-
-// option 5
+// 選項 2 --> 終極密碼
+void Password(){
+  //程式碼待寫區
+}
+// 選項 3 --> 1A2B猜數字
+void Guess_Number(){
+  //程式碼待寫區
+}
+// 選項 4 --> 記憶前綴和
+void Memory_Prfix(){
+  //程式碼待寫區
+}
+// 選項 5 --> 
+void Random_change(){
+  //程式碼待寫區
+} 
 
 void setup()
 {
@@ -151,4 +151,8 @@ void setup()
 void loop()
 {
   SRP();
+  Password()
+  Guess_Number()
+  Memory_Prfix()
+  Random_change()
 }
