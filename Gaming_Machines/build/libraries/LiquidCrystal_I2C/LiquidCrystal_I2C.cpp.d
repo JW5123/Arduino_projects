@@ -1,4 +1,4 @@
-/Users/renjiewang/Desktop/Arduino/Scissors_Rock_Paper/build/libraries/LiquidCrystal_I2C/LiquidCrystal_I2C.cpp.o: \
+/Users/renjiewang/Documents/GitHub/Arduino_projects/Gaming_Machines/build/libraries/LiquidCrystal_I2C/LiquidCrystal_I2C.cpp.o: \
  /Users/renjiewang/Documents/Arduino/libraries/LiquidCrystal_I2C/LiquidCrystal_I2C.cpp \
  /Users/renjiewang/Documents/Arduino/libraries/LiquidCrystal_I2C/LiquidCrystal_I2C.h \
  /Users/renjiewang/Library/Arduino15/packages/arduino/hardware/avr/1.8.5/cores/arduino/Print.h \

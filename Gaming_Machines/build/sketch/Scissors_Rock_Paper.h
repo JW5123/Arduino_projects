@@ -1,59 +1,38 @@
-#include <Arduino.h>
-#line 1 "/Users/renjiewang/Desktop/Arduino/Scissors_Rock_Paper/Scissors_Rock_Paper.ino"
-int red = 2;
-int yellow = 3;
-int green = 4;
-
-int scissors = 11;
-int rock = 12;
-int paper = 13;
-#define SPEAKER_PIN 5
-
-// LCD
+#line 1 "/Users/renjiewang/Documents/GitHub/Arduino_projects/Gaming_Machines/Scissors_Rock_Paper.h"
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
+#define red A2
+#define yellow A1
+#define green 10
+int scissors = 11;
+int rock = 12;
+int paper = 13;
+#define SPEAKER_PIN A3
+
+
 // 選項 1 --> 猜拳
-#line 15 "/Users/renjiewang/Desktop/Arduino/Scissors_Rock_Paper/Scissors_Rock_Paper.ino"
-void SRP();
-#line 118 "/Users/renjiewang/Desktop/Arduino/Scissors_Rock_Paper/Scissors_Rock_Paper.ino"
-void Password();
-#line 122 "/Users/renjiewang/Desktop/Arduino/Scissors_Rock_Paper/Scissors_Rock_Paper.ino"
-void Guess_Number();
-#line 126 "/Users/renjiewang/Desktop/Arduino/Scissors_Rock_Paper/Scissors_Rock_Paper.ino"
-void Memory_Prfix();
-#line 130 "/Users/renjiewang/Desktop/Arduino/Scissors_Rock_Paper/Scissors_Rock_Paper.ino"
-void Random_change();
-#line 134 "/Users/renjiewang/Desktop/Arduino/Scissors_Rock_Paper/Scissors_Rock_Paper.ino"
-void setup();
-#line 151 "/Users/renjiewang/Desktop/Arduino/Scissors_Rock_Paper/Scissors_Rock_Paper.ino"
-void loop();
-#line 15 "/Users/renjiewang/Desktop/Arduino/Scissors_Rock_Paper/Scissors_Rock_Paper.ino"
-void SRP(){
+void Scissors_Rock_Paper(){
+
   int bot_input = random() % 3 + 1; // 1=scissors,2=rock,3=paper
   int player_input;
   String outcome; //"win","lose","withdraw"
 
   //等待玩家input, 玩家按按鈕 while break
-  while (true)
-  {
-    if (digitalRead(scissors) == LOW)
-    {
+  while (true){
+    if (digitalRead(scissors) == LOW){
       player_input = 1;
       break;
     }
-    if (digitalRead(rock) == LOW)
-    {
+    if (digitalRead(rock) == LOW){
       player_input = 2;
       break;
     }
-    if (digitalRead(paper) == LOW)
-    {
+    if (digitalRead(paper) == LOW){
       player_input = 3;
       break;
     }
   }
-
   //運算結果,比較bot_input和player_input並把結果寫在outcome裡
   if (player_input == 1){
     if (bot_input == 1){
@@ -99,6 +78,7 @@ void SRP(){
     lcd.setCursor(0, 1); // 1,3
     lcd.print("Outcome:");
     lcd.print(outcome);
+    Serial.println(outcome);
     tone(SPEAKER_PIN, 523); // C5
     delay(1500);
     digitalWrite(green, LOW);
@@ -111,6 +91,7 @@ void SRP(){
     lcd.setCursor(0, 1); // 1,3
     lcd.print("Outcome:");
     lcd.print(outcome);
+    Serial.println(outcome);
     tone(SPEAKER_PIN, 262); // C4
     delay(1500);
     digitalWrite(red, LOW);
@@ -123,53 +104,11 @@ void SRP(){
     lcd.setCursor(0, 1); // 1,3
     lcd.print("Outcome:");
     lcd.print(outcome);
+    Serial.println(outcome);
     tone(SPEAKER_PIN, 392); // G5
     delay(1500);
     digitalWrite(yellow, LOW);
   }
   lcd.clear();
   noTone(SPEAKER_PIN);
-}
-
-// 選項 2 --> 終極密碼
-void Password(){
-  //程式碼待寫區
-}
-// 選項 3 --> 1A2B猜數字
-void Guess_Number(){
-  //程式碼待寫區
-}
-// 選項 4 --> 記憶前綴和
-void Memory_Prfix(){
-  //程式碼待寫區
-}
-// 選項 5 --> 
-void Random_change(){
-  //程式碼待寫區
-} 
-
-void setup()
-{
-  // LCD
-  lcd.init();
-  lcd.backlight();
-  // 初始化
-  pinMode(red, OUTPUT);
-  pinMode(yellow, OUTPUT);
-  pinMode(green, OUTPUT);
-  //三個按鈕的初始化
-  pinMode(scissors, INPUT_PULLUP);
-  pinMode(rock, INPUT_PULLUP);
-  pinMode(paper, INPUT_PULLUP);
-
-  randomSeed(analogRead(0));
-}
-
-void loop()
-{
-  SRP();
-  Password()
-  Guess_Number()
-  Memory_Prfix()
-  Random_change()
 }

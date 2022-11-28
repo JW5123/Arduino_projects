@@ -1,5 +1,5 @@
-/Users/renjiewang/Desktop/Arduino/Scissors_Rock_Paper/build/sketch/Scissors_Rock_Paper.ino.cpp.o: \
- /Users/renjiewang/Desktop/Arduino/Scissors_Rock_Paper/build/sketch/Scissors_Rock_Paper.ino.cpp \
+/Users/renjiewang/Documents/GitHub/Arduino_projects/Gaming_Machines/build/sketch/Gaming_Machines.ino.cpp.o: \
+ /Users/renjiewang/Documents/GitHub/Arduino_projects/Gaming_Machines/build/sketch/Gaming_Machines.ino.cpp \
  /Users/renjiewang/Library/Arduino15/packages/arduino/hardware/avr/1.8.5/cores/arduino/Arduino.h \
  /Users/renjiewang/Library/Arduino15/packages/arduino/hardware/avr/1.8.5/cores/arduino/binary.h \
  /Users/renjiewang/Library/Arduino15/packages/arduino/hardware/avr/1.8.5/cores/arduino/WCharacter.h \
@@ -11,6 +11,7 @@
  /Users/renjiewang/Library/Arduino15/packages/arduino/hardware/avr/1.8.5/cores/arduino/USBAPI.h \
  /Users/renjiewang/Library/Arduino15/packages/arduino/hardware/avr/1.8.5/cores/arduino/Arduino.h \
  /Users/renjiewang/Library/Arduino15/packages/arduino/hardware/avr/1.8.5/variants/standard/pins_arduino.h \
+ /Users/renjiewang/Documents/GitHub/Arduino_projects/Gaming_Machines/build/sketch/Scissors_Rock_Paper.h \
  /Users/renjiewang/Documents/Arduino/libraries/LiquidCrystal_I2C/LiquidCrystal_I2C.h \
  /Users/renjiewang/Library/Arduino15/packages/arduino/hardware/avr/1.8.5/cores/arduino/Print.h \
  /Users/renjiewang/Library/Arduino15/packages/arduino/hardware/avr/1.8.5/libraries/Wire/src/Wire.h \
