@@ -1,3 +1,0 @@
-void Guess_Number(){
-    
-}

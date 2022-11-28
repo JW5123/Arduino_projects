@@ -1,3 +1,0 @@
-void Memory_Prifix(){
-    
-}
