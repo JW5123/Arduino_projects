@@ -1,6 +1,6 @@
 {
-    "sketch": "Scissors_Rock_Paper.ino",
+    "sketch": "Gaming_Machines.ino",
     "output": "build",
     "board": "arduino:avr:uno",
-    "port": "/dev/tty.usbmodem143201"
+    "port": "/dev/tty.usbmodem14401"
 }
