@@ -24,6 +24,7 @@ bool acceptKey = true;
 char score1[100], score2[100];
 int computer = 0, player = 0;
 
+// mode option
 void ModeChoose(){
     lcd.setCursor(3, 0);
     lcd.print("Game mode");
@@ -67,6 +68,7 @@ void ModeChoose(){
     lcd.clear();
 }
 
+// Mode4
 int Mode4(){
     int num = 0;
     int res = 0;
@@ -121,7 +123,7 @@ int Mode4(){
     return num;
 }
 
-
+// all mode
 int All_mode(){
     int num = 0;
     if(game_mode == 1){
@@ -149,17 +151,12 @@ int All_mode(){
         lcd.clear();
     }
     else if(game_mode == 4){
-        num = Mode4();
+        num = Mode4();  //call Mode4 function
     }
     return num;
 }
 
-void input(){
-    lcd.setCursor(0, 0);
-    lcd.print("Your Guess:");
-    acceptKey = true;
-    guessNum = "";
-}
+// start guess
 void PlayGame(){
     int errorNum[] = {0, 65, 67, 68, 69, 35, 32};   // Not numbers
     long number = random(1, 101);
@@ -167,7 +164,10 @@ void PlayGame(){
     int res = 0;
     int flag = 0;
     for(int i = 1; i <= num; i++){
-        input();
+        lcd.setCursor(0, 0);
+        lcd.print("Your Guess:");
+        acceptKey = true;
+        guessNum = "";
         while(true){
             char key = myKeypad.getKey();
             if(acceptKey && key != NO_KEY){
@@ -269,6 +269,7 @@ void setup()
 }
 void loop()
 {
+    // call function
     ModeChoose();
     PlayGame();
 }
