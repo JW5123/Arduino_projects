@@ -1,6 +1,0 @@
-{
-    "sketch": "Gaming_Machines.ino",
-    "output": "build",
-    "board": "arduino:avr:uno",
-    "port": "/dev/tty.usbmodem14401"
-}
