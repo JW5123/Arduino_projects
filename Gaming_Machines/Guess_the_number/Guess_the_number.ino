@@ -211,7 +211,7 @@ void PlayGame(){
         }
         lcd.setCursor(0, 1);
         if(res == 1){
-            lcd.print("Error Re-enter!!");
+            lcd.print("Error Re-enter!!");  // Have a bug in current
         }
         else if(res == 2){
             lcd.print("Guess to big!!");
@@ -248,7 +248,7 @@ void PlayGame(){
     lcd.setCursor(0, 1);
     sprintf(score2, "Player:%d", player);
     lcd.print(score2);
-    delay(2000);
+    delay(1500);
     lcd.clear();
 }
 
@@ -261,7 +261,7 @@ void setup()
     lcd.print("Welcome to");
     lcd.setCursor(0, 1);
     lcd.print("Guess nums game");
-    delay(2000);
+    delay(1500);
     lcd.clear();
 
     randomSeed(analogRead(0));
