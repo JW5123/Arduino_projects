@@ -1,6 +1,5 @@
 #include <LiquidCrystal_I2C.h>
 #include <Keypad.h>
-#include <time.h>
 
 #define KEY_ROWS 4 
 #define KEY_COLS 4
@@ -23,6 +22,8 @@ bool acceptKey = true;
 
 char score1[100], score2[100];
 int computer = 0, player = 0;
+
+int errorNum[] = {0, 65, 67, 68, 69, 35, 32};   // Not numbers
 
 // mode option
 void ModeChoose(){
@@ -84,7 +85,6 @@ int Mode4(){
                 if(inp == '#'){
                     acceptKey = false;
                     int times = atoi(modeNum.c_str());
-                    int errorNum[] = {0, 65, 67, 68, 69, 35, 32};   // Not numbers
                     if(times == NULL){
                         for(int i = 0; i < errorNum; i++){
                             if(times == errorNum[i])
@@ -158,7 +158,6 @@ int All_mode(){
 
 // start guess
 void PlayGame(){
-    int errorNum[] = {0, 65, 67, 68, 69, 35, 32};   // Not numbers
     long number = random(1, 101);
     int num = All_mode();
     int res = 0;
@@ -212,6 +211,7 @@ void PlayGame(){
         lcd.setCursor(0, 1);
         if(res == 1){
             lcd.print("Error Re-enter!!");  // Have a bug in current
+            num++;
         }
         else if(res == 2){
             lcd.print("Guess to big!!");
