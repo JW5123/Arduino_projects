@@ -171,9 +171,9 @@ void PlayGame(){
             char key = myKeypad.getKey();
             if(acceptKey && key != NO_KEY){
                 if(key == '#'){
-                    lcd.setCursor(0, 1);
                     acceptKey = false;
                     int guess = atoi(guessNum.c_str());
+                    //lcd.setCursor(0, 1);
                     // lcd.print(number);
                     // delay(500);
                     if(num == 0){
@@ -210,7 +210,7 @@ void PlayGame(){
         }
         lcd.setCursor(0, 1);
         if(res == 1){
-            lcd.print("Error Re-enter!!");  // Have a bug in current
+            lcd.print("Error Re-enter!!");
             num++;
         }
         else if(res == 2){
