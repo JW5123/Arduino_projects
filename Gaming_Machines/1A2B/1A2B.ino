@@ -106,6 +106,9 @@ void PlayGame(){
         }
         int flag = 0;
         if(res == 1){
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print("4A0B");
             lcd.setCursor(0, 1);
             lcd.print("Bingo!!");
             delay(2000);
