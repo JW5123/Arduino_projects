@@ -1,5 +1,5 @@
 #include <LiquidCrystal_I2C.h>
-LiquidCrystal_I2C lcd(0x27,20,4);
+LiquidCrystal_I2C lcd(0x27,16,2);
 
 //*****game5 var*****
 int life = 3;
@@ -13,7 +13,7 @@ int game5button = 12; //change here
 //*******************
 void updatelcd(){
     lcd.clear();
-    lcd.setCursor(0, 0);
+    lcd.setCursor(0,0);
     lcd.print("Life:");
     lcd.print(life);
     lcd.print("  ");
@@ -21,27 +21,25 @@ void updatelcd(){
     lcd.print(score);
     lcd.setCursor(0, 1);
     lcd.print("----------------");
-    lcd.setCursor(goal, 2);
+    lcd.setCursor(goal, 1);
     lcd.print("*");
-    /*
-    if(score == 0){
-        lcd.setCursor(0, 3);
-        lcd.print("Tip: holding button");
-    }
-    if(score == 1){
-        lcd.setCursor(0, 3);
-        lcd.print("Tip: press before *");
-    }
-    */
+    // if(score == 0){
+    //     lcd.setCursor(0, 3);
+    //     lcd.print("Tip: holding button");
+    // }
+    // if(score == 1){
+    //   lcd.setCursor(0, 3);
+    //   lcd.print("Tip: press before *");
+    // }
 }
 void game5_init(){
     lcd.clear();
     life = 3;
     score = 0;
     speed = 500;
-    //gameover_timer = 8;
+    gameover_timer = 8;
     randomSeed(analogRead(1));
-    goal = random(3, 16);
+    goal = random(1, 16);
 }
 void game5(){
     game5_init();
@@ -55,20 +53,23 @@ void game5(){
             lcd.print("-");
             lcd.setCursor(goal, 1);
             lcd.print("*");
-            if(pos == 15 || pos == 0){
+            if(pos == 15 or pos == 0){
                 dect = dect * -1;
             }
             pos = pos + dect;
         }
         if(pos - dect == goal){
             score++;
-            speed = speed * 8 / 10;
+            speed = speed * 8/10;
+            goal = random(3, 12);
             lcd.setCursor(0, 1);
-            lcd.print("Win");
-        }else{
+            lcd.print("------Win-----");
+        }
+        else{
             life--;
+            goal = random(3, 12);
             lcd.setCursor(0, 1);
-            lcd.print("Lose");
+            lcd.print("-----Lose-----");
         }
         delay(2000);
         if(life == -1){
