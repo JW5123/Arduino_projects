@@ -21,12 +21,14 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 #define yellow A1
 #define green 10
 
-int upButton = 11, rock = 11;
-int selectButton = 12, paper = 12;
-int downButton = 13, scissors = 13;
+int upButton = 11, rock = 11, G_Button = 11;
+int selectButton = 12, paper = 12, Y_Button = 12;
+int downButton = 13, scissors = 13, R_Button = 13;
 // Buzzer Pin
 #define SPEAKER_PIN A3
 
+// Scissors rock paper
+int pla = 0, com = 0;
 
 // guess_the_num
 String modeNum = "";
@@ -35,12 +37,21 @@ int game_mode = 0;
 bool acceptKey = true;
 int errorNum[] = {0, 65, 67, 68, 69, 35, 32};   // Not numbers
 
+char score1[100], score2[100];
+int computer = 0, player = 0;
+
 // 1A2B
 String guess_1A2B = "";
 bool acceptkey = true;
 int a, b, c, d;
 int e, f, g, h;
 char A[4], B[4];
+
+// Memorize prefix sum
+// #define R_LED A2
+// #define Y_LED A1
+// #define G_LED 10
+
 
 // Random location
 int life = 3;
@@ -49,7 +60,6 @@ int goal;
 int pos = 1;
 int dect = 1;
 int speed = 500;
-int gameover_timer = 8;
 int game5button = 12; //change here
 
 
@@ -74,6 +84,7 @@ void Roundup(){
             break;
         }
         if(choose == '2'){
+            pla = 0, com = 0;
             lcd.clear();
             Roundmode = 2;
             lcd.setCursor(4, 1);
@@ -82,6 +93,7 @@ void Roundup(){
             break;
         }
         if(choose == '3'){
+            pla = 0, com = 0;
             lcd.clear();
             Roundmode = 3;
             lcd.setCursor(8, 1);
@@ -90,6 +102,7 @@ void Roundup(){
             break;
         }
         if(choose == '4'){
+            pla = 0, com = 0;
             lcd.clear();
             Roundmode = 4;
             lcd.setCursor(12, 1);
@@ -138,7 +151,7 @@ int PressTimes(){
     return num;
 }
 
-void Playgame1(){
+void PlayGame1(){
     int bot_input = random(1, 4);
     int player_input;
     String outcome;
@@ -148,7 +161,9 @@ void Playgame1(){
 
     int num = PressTimes();
     int flag = 0;
+    int res = 0;
     
+
     for(int i = 1; i <= num; i++){
         while(true){
             if(digitalRead(rock) == LOW){
@@ -229,51 +244,49 @@ void Playgame1(){
         Serial.println(player_1);
         Serial.println(computer_1);
         if(num == 3){
-            if(player_1 == 2 || computer_1){
-                if(player_1 > computer_1)
-                    flag = 1;
-                else
-                    flag = 2;
-            }
+            flag = 1;
         }
         if(num == 5){
-            if(player_1 == 3 && player_1 > computer_1)
-                flag = 1;
-            else if(computer_1 == 3 && computer_1 > player_1)
-                flag = 2;
+            flag = 2;
         }
         if(num == 7){
-            if(player_1 == 4 && player_1 > computer_1)
-                flag = 1;
-            else if(computer_1 == 4 && computer_1 > player_1)
-                flag = 2;
+            flag = 3;
         }
         if(num == 9){
-            if(player_1 == 5 && player_1 > computer_1)
-                flag = 1;
-            else if(computer_1 == 5 && computer_1 > player_1)
-                flag = 2;
+            flag = 4;
         }
+    }
+    if(flag == 1){
+        player_1 > computer_1 ? res = 1 : res = 2;
+    }
+    else if(flag == 2){
+        player_1 > computer_1 ? res = 1 : res = 2;
+    }
+    else if(flag == 3){
+        player_1 > computer_1 ? res = 1 : res = 2;
+    }
+    else{
+        player_1 > computer_1 ? res = 1 : res = 2;
     }
     lcd.clear();
     lcd.setCursor(3, 0);
-    if(flag == 1){
+    if(res == 1){
         lcd.print("You Win!!");
-        delay(2000);
-        lcd.clear();
+        pla++;
     }
-    else if(flag == 2){
+    else{
         lcd.print("You Lose!!");
-        delay(2000);
-        lcd.clear();
+        com++;
     }
+    delay(2000);
+    lcd.clear();
     lcd.setCursor(0, 0);
-    sprintf(times1, "Player:%d", player_1);
+    sprintf(times1, "Player:%d", pla);
     lcd.print(times1);
     lcd.setCursor(0, 1);
-    sprintf(times2, "Computer:%d", computer_1);
+    sprintf(times2, "Computer:%d", com);
     lcd.print(times2);
-    delay(2000);
+    delay(3000);
 }
 
 /******************************************** Guess the number ********************************************/
@@ -282,7 +295,7 @@ void Playgame1(){
 void ModeChoose(){
     lcd.clear();
     lcd.setCursor(3, 0);
-    lcd.print("Game mode");
+    lcd.print("Guess mode");
     lcd.setCursor(0, 1);
     lcd.print("[1] [2] [3] [4]");
     while(true){
@@ -339,12 +352,8 @@ int Mode4(){
                 if(inp == '#'){
                     acceptKey = false;
                     int times = atoi(modeNum.c_str());
-                    if(times == NULL){
-                        for(int i = 0; i < errorNum; i++){
-                            if(times == errorNum[i])
-                                res = 1;
-                                break;
-                        }
+                    if(times > 100 || times <= 0){
+                        res = 1;
                         break;
                     }
                     else{
@@ -412,13 +421,11 @@ int All_mode(){
 
 // start guess
 void PlayGame2(){
-    char score1[100], score2[100];
-    int computer = 0, player = 0;
-
-    long number = random(1, 101);
+    int number = random(1, 101);
     int num = All_mode();
     int res = 0;
     int flag = 0;
+    int guesstimes = 0;
     for(int i = 1; i <= num; i++){
         lcd.setCursor(0, 0);
         lcd.print("Your Guess:");
@@ -436,13 +443,8 @@ void PlayGame2(){
                     if(num == 0){
                         break;
                     }
-                    if(guess == NULL){
-                        for(int i = 0; i < errorNum; i++){
-                            if(guess == errorNum[i]){
-                                res = 1;
-                                break;
-                            }
-                        }
+                    if(guess > 100 || guess <= 0){
+                        res = 1;
                         break;
                     }
                     if(guess > number){
@@ -469,15 +471,19 @@ void PlayGame2(){
         if(res == 1){
             lcd.print("Error Re-enter!!");
             num++;
+            guesstimes++;
         }
         else if(res == 2){
             lcd.print("Guess to big!!");
+            guesstimes++;
         }
         else if(res == 3){
             lcd.print("Guess to small!!");
+            guesstimes++;
         }
         else if(res == 4){
             lcd.print("Guess right!!");
+            guesstimes++;
             flag = 1;
         }
         delay(1000);
@@ -500,12 +506,17 @@ void PlayGame2(){
     delay(1200);
     lcd.clear();
     lcd.setCursor(0, 0);
-    sprintf(score1, "Computer:%d", computer);
-    lcd.print(score1);
-    lcd.setCursor(0, 1);
+    lcd.print("Guess times:");
+    lcd.print(guesstimes);
+    delay(2000);
+    lcd.clear();
+    lcd.setCursor(0, 0);
     sprintf(score2, "Player:%d", player);
     lcd.print(score2);
-    delay(1500);
+    lcd.setCursor(0, 1);
+    sprintf(score1, "Computer:%d", computer);
+    lcd.print(score1);
+    delay(2000);
 }
 
 /************************************************** 1A2B **************************************************/
@@ -522,6 +533,7 @@ void Home(){
 
 void PlayGame3(){
     int res = 0;
+    int times = 0;
 
     do{
         a = random(1, 10);
@@ -601,6 +613,7 @@ void PlayGame3(){
             lcd.print("Bingo!!");
             delay(2000);
             lcd.clear();
+            times++;
             flag = 1;
         }
         else if(res == 2){
@@ -611,6 +624,7 @@ void PlayGame3(){
             lcd.print("Enter nums again");
             delay(2000);
             lcd.clear();
+            times++;
         }
         else if(res == 3){
             lcd.clear();
@@ -620,6 +634,7 @@ void PlayGame3(){
             lcd.print("enter a 4 digits");
             delay(2000);
             lcd.clear();
+            times++;
         }
         else if(res == 4){
             lcd.setCursor(0, 1);
@@ -630,18 +645,152 @@ void PlayGame3(){
             lcd.print(B);
             delay(2000);
             lcd.clear();
+            times++;
         }
         if(flag == 1){
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print("Guess times:");
+            lcd.print(times);
+            delay(2000);
             lcd.clear();
             break;
         }
     }
 }
 
-/****************************************** Memorize prefix sum *******************************************/
+/****************************************** Prefix_Memorization *******************************************/
 
+void PlayGame4() {
+    String ans;         // ans
+    int score = 0;      // total score
+    int i;              // rounds
+    int j;              // led
 
+    lcd.setCursor(0, 0);
+    lcd.print("Start: Press #");
+    while(true){
+        char s = myKeypad.getKey();
+        if(s == '#'){
+            lcd.clear();
+            lcd.setCursor(5, 0);
+            lcd.print("Start");
+            delay(2000);
+            lcd.clear();
+            for(i = 0; i < 30; ++i) {
+                int num;
 
+                if(i < 3) 
+                    num = random(1, 3);
+                else 
+                    num = random(1, 4);
+
+                for(int j = 0; j < num; ++j) {
+                    int color = random(1, 4);
+
+                    if(color == 1) { 
+                        ans += '1';
+                        digitalWrite(red, HIGH);
+                        delay(1500);
+                        digitalWrite(red, LOW);
+                        delay(300);
+                    }
+                    else if(color == 2) {
+                        ans += '2';
+                        digitalWrite(yellow, HIGH);
+                        delay(1500);
+                        digitalWrite(yellow, LOW);
+                        delay(300);
+                    }
+                    else if(color == 3) {
+                        ans += '3';
+                        digitalWrite(green, HIGH);
+                        delay(1500);
+                        digitalWrite(green, LOW);
+                        delay(300);
+                    }
+                }
+
+                Serial.print("ans = ");
+                Serial.println(ans);
+
+                bool win = true; 
+                for(j = 0; j < ans.length(); ++j) {
+                    bool correct = true;
+                    while(true) {
+                        if(digitalRead(R_Button) == LOW) {
+                            if(ans[j] != '1') 
+                                correct = false;
+                            digitalWrite(red, HIGH);
+                            delay(200);
+                            digitalWrite(red, LOW);
+                            break;
+                        }
+                        if(digitalRead(Y_Button) == LOW) {
+                            if(ans[j] != '2') 
+                                correct = false;
+                            digitalWrite(yellow, HIGH);
+                            delay(200);
+                            digitalWrite(yellow, LOW);
+                            break;
+                        }
+                        if(digitalRead(G_Button) == LOW) {
+                            if(ans[j] != '3') 
+                                correct = false;
+                            digitalWrite(green, HIGH);
+                            delay(200);
+                            digitalWrite(green, LOW);
+                            break;
+                        }
+                    }
+                    if(!correct) {  // 按錯燈
+                        tone(SPEAKER_PIN, 262);
+                        delay(1000);
+                        noTone(SPEAKER_PIN);
+                        win = false;
+                        break;
+                    }
+                }
+                delay(1000);
+
+                lcd.setCursor(0, 0);
+                lcd.print("Score +");
+                lcd.print(j);
+                score += j;
+
+                lcd.setCursor(0, 1);
+                lcd.print("Score:");
+                lcd.print(score);
+                delay(2000);
+
+                if(!win){
+                    lcd.clear();
+                    lcd.setCursor(0, 0);
+                    lcd.print("  Game Over!!!");
+                    break;
+                }
+            }
+            delay(1000);
+
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print(i + 1);
+            if(i == 0 || i == 1) 
+                lcd.print(" Round.");
+            else 
+                lcd.print(" Rounds.");
+
+            lcd.setCursor(0, 1);
+            lcd.print("Score:");
+            lcd.print(score);
+            delay(2500);
+            lcd.clear();
+            
+            delay(500);
+            break;
+        }
+    }
+}
 
 /********************************************* Random location ********************************************/
 
@@ -663,51 +812,64 @@ void game5_init(){
     life = 3;
     score = 0;
     speed = 500;
-    gameover_timer = 8;
-    randomSeed(analogRead(1));
+    randomSeed(analogRead(0));
     goal = random(1, 16);
 }
-void game5(){
-    game5_init();
+void PlayGame5(){
+
+    lcd.setCursor(0, 0);
+    lcd.print("Start: Press #");
     while(true){
-        updatelcd();
-        while(digitalRead(12) == HIGH){
-            delay(speed);
-            lcd.setCursor(pos, 1);
-            lcd.print("|");
-            lcd.setCursor(pos - dect, 1);
-            lcd.print("-");
-            lcd.setCursor(goal, 1);
-            lcd.print("*");
-            if(pos == 15 or pos == 0){
-                dect = dect * -1;
-            }
-            pos = pos + dect;
-        }
-        if(pos - dect == goal){
-            score++;
-            speed = speed * 8/10;
-            goal = random(3, 12);
-            lcd.setCursor(0, 1);
-            lcd.print("------Win-----");
-        }
-        else{
-            life--;
-            goal = random(3, 12);
-            lcd.setCursor(0, 1);
-            lcd.print("-----Lose-----");
-        }
-        delay(2000);
-        if(life == -1){
+        char s = myKeypad.getKey();
+        if(s == '#'){
             lcd.clear();
-            lcd.setCursor(4, 0);
-            lcd.print("Gameover");
-            lcd.setCursor(4, 1);
-            lcd.print("Score:");
-            lcd.print(score);
-            while(gameover_timer != 0){
+            lcd.setCursor(5, 0);
+            lcd.print("Start");
+            delay(1000);
+            lcd.clear();
+            game5_init();
+            while(true){
+                updatelcd();
+                while(digitalRead(12) == HIGH){
+                    delay(speed);
+                    lcd.setCursor(pos, 1);
+                    lcd.print("O");
+                    lcd.setCursor(pos - dect, 1);
+                    lcd.print("-");
+                    lcd.setCursor(goal, 1);
+                    lcd.print("*");
+                    if(pos == 15 || pos == 0){
+                        dect = dect * -1;
+                    }
+                    pos = pos + dect;
+                }
+                if(pos - dect == goal){
+                    score++;
+                    speed = speed * 8 / 10;
+                    goal = random(3, 12);
+                    lcd.setCursor(0, 1);
+                    lcd.print("------Win-----");
+                }
+                else{
+                    life--;
+                    goal = random(3, 12);
+                    lcd.setCursor(0, 1);
+                    lcd.print("-----Lose-----");
+                    tone(SPEAKER_PIN, 262);
+                    delay(1000);
+                    noTone(SPEAKER_PIN);
+                }
                 delay(1000);
-                gameover_timer--;
+                if(life == -1){
+                    lcd.clear();
+                    lcd.setCursor(4, 0);
+                    lcd.print("Gameover");
+                    lcd.setCursor(4, 1);
+                    lcd.print("Score:");
+                    lcd.print(score);
+                    delay(3000);
+                    break;
+                }
             }
             break;
         }
@@ -781,7 +943,7 @@ void action1() {
     lcd.clear();
     while(true){
         Roundup();
-        Playgame1();
+        PlayGame1();
         lcd.clear();
         lcd.setCursor(0, 0);
         lcd.print("Continue? Y/N");
@@ -803,6 +965,7 @@ void action1() {
             break;
     }
 }
+
 void action2() {
     lcd.clear();
     lcd.print(">Choose game2");
@@ -861,7 +1024,28 @@ void action4() {
     lcd.clear();
     lcd.print(">Choose game4");
     delay(1000);
+    int flag = 0;
+    start:
+    while(true){
+        PlayGame4();
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Continue? Y/N");
+        while(true){
+            char p4 = myKeypad.getKey();
+            if(p4 == 'A'){
+                goto start;
+            }
+            if(p4 == 'B'){
+                flag = 1;
+                break;
+            }
+        }
+        if(flag == 1)
+            break;
+    }
 }
+
 void action5() {
     lcd.clear();
     lcd.print(">Choose game5");
@@ -869,7 +1053,7 @@ void action5() {
     int flag = 0;
     start:
     while(true){
-        game5();
+        PlayGame5();
         lcd.clear();
         lcd.setCursor(0, 0);
         lcd.print("Continue? Y/N");
@@ -922,11 +1106,10 @@ void setup(){
     pinMode(green, OUTPUT);
 
     pinMode(upButton, INPUT_PULLUP);    // rock
-    //scissors && game5button
-    pinMode(selectButton, INPUT_PULLUP);
+    pinMode(selectButton, INPUT_PULLUP);  //scissors && game5button
     pinMode(downButton, INPUT_PULLUP);  // paper
 
-    randomSeed(analogRead(1));
+    randomSeed(analogRead(0));
 
     updateMenu();
 }
