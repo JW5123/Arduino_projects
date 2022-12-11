@@ -47,11 +47,6 @@ int a, b, c, d;
 int e, f, g, h;
 char A[4], B[4];
 
-// Memorize prefix sum
-// #define R_LED A2
-// #define Y_LED A1
-// #define G_LED 10
-
 
 // Random location
 int life = 3;
@@ -535,6 +530,7 @@ void PlayGame3(){
     int res = 0;
     int times = 0;
 
+    randomSeed(analogRead(0));
     do{
         a = random(1, 10);
         b = random(0, 10);
@@ -611,7 +607,11 @@ void PlayGame3(){
             lcd.print("4A0B");
             lcd.setCursor(0, 1);
             lcd.print("Bingo!!");
-            delay(2000);
+            tone(SPEAKER_PIN, 1046);
+            delay(300);
+            tone(SPEAKER_PIN, 1245);
+            delay(1000);
+            noTone(SPEAKER_PIN);
             lcd.clear();
             times++;
             flag = 1;
@@ -848,13 +848,13 @@ void PlayGame5(){
                     speed = speed * 8 / 10;
                     goal = random(3, 12);
                     lcd.setCursor(0, 1);
-                    lcd.print("------Win-----");
+                    lcd.print("-------Win------");
                 }
                 else{
                     life--;
                     goal = random(3, 12);
                     lcd.setCursor(0, 1);
-                    lcd.print("-----Lose-----");
+                    lcd.print("------Lose------");
                     tone(SPEAKER_PIN, 262);
                     delay(1000);
                     noTone(SPEAKER_PIN);
