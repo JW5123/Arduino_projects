@@ -1,1 +1,1 @@
-# Puzzle Gaming Machines
+# Puzzle game machines
