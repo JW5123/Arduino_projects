@@ -71,6 +71,7 @@ void Roundup(){
     while(true){
         char choose = myKeypad.getKey();
         if(choose == '1'){
+            pla = 0, com = 0;
             lcd.clear();
             Roundmode = 1;
             lcd.setCursor(0, 1);
@@ -765,22 +766,22 @@ void PlayGame4() {
 
                 if(!win){
                     lcd.clear();
-                    lcd.setCursor(0, 0);
-                    lcd.print("  Game Over!!!");
+                    lcd.setCursor(2, 0);
+                    lcd.print("Game Over!!!");
                     break;
                 }
             }
             delay(1000);
 
             lcd.clear();
-            lcd.setCursor(0, 0);
+            lcd.setCursor(4, 0);
             lcd.print(i + 1);
             if(i == 0 || i == 1) 
                 lcd.print(" Round.");
             else 
                 lcd.print(" Rounds.");
 
-            lcd.setCursor(0, 1);
+            lcd.setCursor(4, 1);
             lcd.print("Score:");
             lcd.print(score);
             delay(2500);
