@@ -74,7 +74,6 @@ void Roundup(){
     while(true){
         char choose = myKeypad.getKey();
         if(choose == '1'){
-            pla = 0, com = 0;
             lcd.clear();
             Roundmode = 1;
             lcd.setCursor(0, 1);
@@ -83,7 +82,6 @@ void Roundup(){
             break;
         }
         if(choose == '2'){
-            pla = 0, com = 0;
             lcd.clear();
             Roundmode = 2;
             lcd.setCursor(4, 1);
@@ -92,7 +90,6 @@ void Roundup(){
             break;
         }
         if(choose == '3'){
-            pla = 0, com = 0;
             lcd.clear();
             Roundmode = 3;
             lcd.setCursor(8, 1);
@@ -101,7 +98,6 @@ void Roundup(){
             break;
         }
         if(choose == '4'){
-            pla = 0, com = 0;
             lcd.clear();
             Roundmode = 4;
             lcd.setCursor(12, 1);
@@ -147,6 +143,11 @@ int PressTimes(){
         delay(1000);
         lcd.clear();
     }
+    lcd.setCursor(6, 0);
+    lcd.print("Start");
+    Serial.println("Start");
+    delay(1500);
+    lcd.clear();
     return num;
 }
 
@@ -175,38 +176,38 @@ void PlayGame1(){
         while(true){
             if(digitalRead(rock_1) == LOW){
                 player2_input = 1;
-                digitalWrite(green, HIGH);
-                delay(1000);
-                digitalWrite(green, LOW);
+                // digitalWrite(green, HIGH);
+                // delay(1000);
+                // digitalWrite(green, LOW);
                 break;
             }
             if(digitalRead(paper_1) == LOW){
                 player2_input = 2;
-                digitalWrite(green, HIGH);
-                delay(1000);
-                digitalWrite(green, LOW);
+                // digitalWrite(green, HIGH);
+                // delay(1000);
+                // digitalWrite(green, LOW);
                 break;
             }
             if(digitalRead(scissors_1) == LOW){
                 player2_input = 3;
-                digitalWrite(green, HIGH);
-                delay(1000);
-                digitalWrite(green, LOW);
+                // digitalWrite(green, HIGH);
+                // delay(1000);
+                // digitalWrite(green, LOW);
                 break;
             }
-        }
-        while(true){
-            if(digitalRead(rock) == LOW){
-                player1_input = 1;
-                break;
-            }
-            if(digitalRead(paper) == LOW){
-                player1_input = 2;
-                break;
-            }
-            if(digitalRead(scissors) == LOW){
-                player1_input = 3;
-                break;
+            while(true){
+                if(digitalRead(rock) == LOW){
+                    player1_input = 1;
+                    break;
+                }
+                if(digitalRead(paper) == LOW){
+                    player1_input = 2;
+                    break;
+                }
+                if(digitalRead(scissors) == LOW){
+                    player1_input = 3;
+                    break;
+                }
             }
         }
         if(player1_input == 1){
@@ -269,6 +270,11 @@ void PlayGame1(){
         lcd.setCursor(0, 1);
         lcd.print("Admin:");
         lcd.print(name[player2_input - 1]);
+
+        Serial.print("You:");
+        Serial.println(name[player2_input - 1]);
+        Serial.print("User:");
+        Serial.println(name[player1_input - 1]);
         // lcd.print("Outcome:");
         // lcd.print(outcome);
         noTone(SPEAKER_PIN);
@@ -302,6 +308,12 @@ void PlayGame1(){
     lcd.setCursor(0, 1);
     sprintf(times2, "Admin:%d", com);
     lcd.print(times2);
+    
+    Serial.print("Admin:");
+    Serial.println(com);
+    Serial.print("User:");
+    Serial.println(pla);
+
     delay(2000);
 }
 
@@ -976,6 +988,7 @@ void action1() {
                 break;
             }
             if(p1 == 'B'){
+                pla = 0, com = 0;
                 flag = 2;
                 break;
             }
@@ -1006,6 +1019,7 @@ void action2() {
                 goto start;
             }
             if(p2 == 'B'){
+                computer = 0, player = 0;
                 flag = 1;
                 break;
             }
