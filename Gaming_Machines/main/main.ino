@@ -60,6 +60,16 @@ int dect = 1;
 int speed = 500;
 int game5button = 12; //change here
 
+// number delete function
+void clearRow(byte n) {
+    byte last = 16 - n;
+    lcd.setCursor(n, 0);
+
+    for (byte i = 0; i < last; i++) {
+        lcd.print(" ");
+    }
+    lcd.setCursor(n, 0);
+}
 
 int menu = 1;
 /******************************************* Scissors rock paper ******************************************/
@@ -390,6 +400,10 @@ int Mode4(){
                         break;
                     }
                 }
+                else if(inp == '*'){
+                    clearRow(12);
+                    modeNum = "";
+                }
                 else{
                     modeNum += inp;
                     lcd.print(inp);
@@ -489,6 +503,10 @@ void PlayGame2(){
                     }
                     lcd.clear();
                 }
+                else if(key == '*'){
+                    clearRow(11);
+                    guessNum = "";
+                }
                 else{ 
                     guessNum += key;
                     lcd.print(key);
@@ -511,10 +529,14 @@ void PlayGame2(){
         }
         else if(res == 4){
             lcd.print("Guess right!!");
+            tone(SPEAKER_PIN, 1046);
+            delay(300);
+            tone(SPEAKER_PIN, 1245);
             guesstimes++;
             flag = 1;
         }
         delay(1000);
+        noTone(SPEAKER_PIN);
         lcd.clear();
         if(num == 0 || flag == 1){
             break;
@@ -563,7 +585,6 @@ void PlayGame3(){
     int res = 0;
     int times = 0;
 
-    randomSeed(analogRead(0));
     do{
         a = random(1, 10);
         b = random(0, 10);
@@ -627,6 +648,10 @@ void PlayGame3(){
                         break;
                     }
                 }
+                else if(num == '*'){
+                    clearRow(11);
+                    guess_1A2B = "";
+                }
                 else{
                     guess_1A2B += num;
                     lcd.print(num);
@@ -670,14 +695,13 @@ void PlayGame3(){
             times++;
         }
         else if(res == 4){
+            lcd.clear();
             lcd.setCursor(0, 1);
             sprintf(A, "%dA", countA);
             lcd.print(A);
             lcd.setCursor(2, 1);
             sprintf(B, "%dB", countB);
             lcd.print(B);
-            delay(2000);
-            lcd.clear();
             times++;
         }
         if(flag == 1){
