@@ -186,38 +186,38 @@ void PlayGame1(){
         while(true){
             if(digitalRead(rock_1) == LOW){
                 player2_input = 1;
-                // digitalWrite(green, HIGH);
-                // delay(1000);
-                // digitalWrite(green, LOW);
+                digitalWrite(green, HIGH);
+                delay(1000);
+                digitalWrite(green, LOW);
                 break;
             }
             if(digitalRead(paper_1) == LOW){
                 player2_input = 2;
-                // digitalWrite(green, HIGH);
-                // delay(1000);
-                // digitalWrite(green, LOW);
+                digitalWrite(green, HIGH);
+                delay(1000);
+                digitalWrite(green, LOW);
                 break;
             }
             if(digitalRead(scissors_1) == LOW){
                 player2_input = 3;
-                // digitalWrite(green, HIGH);
-                // delay(1000);
-                // digitalWrite(green, LOW);
+                digitalWrite(green, HIGH);
+                delay(1000);
+                digitalWrite(green, LOW);
                 break;
             }
-            while(true){
-                if(digitalRead(rock) == LOW){
-                    player1_input = 1;
-                    break;
-                }
-                if(digitalRead(paper) == LOW){
-                    player1_input = 2;
-                    break;
-                }
-                if(digitalRead(scissors) == LOW){
-                    player1_input = 3;
-                    break;
-                }
+        }
+        while(true){
+            if(digitalRead(rock) == LOW){
+                player1_input = 1;
+                break;
+            }
+            if(digitalRead(paper) == LOW){
+                player1_input = 2;
+                break;
+            }
+            if(digitalRead(scissors) == LOW){
+                player1_input = 3;
+                break;
             }
         }
         if(player1_input == 1){
