@@ -17,8 +17,8 @@ Keypad myKeypad = Keypad(makeKeymap(keymap), rowPins, colPins, KEY_ROWS, KEY_COL
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 // LED Pin
-#define red A2
-#define yellow A1
+#define red A1
+#define yellow A2
 #define green 10
 
 int upButton = 11, rock = 11, G_Button = 11;
@@ -28,6 +28,9 @@ int downButton = 13, scissors = 13, R_Button = 13;
 #define SPEAKER_PIN A3
 
 // Scissors rock paper
+int rock_1 = 0;
+int paper_1 = 1;
+#define scissors_1 A0
 int pla = 0, com = 0;
 
 // guess_the_num
@@ -35,7 +38,7 @@ String modeNum = "";
 String guessNum = "";
 int game_mode = 0;
 bool acceptKey = true;
-int errorNum[] = {0, 65, 67, 68, 69, 35, 32};   // Not numbers
+// int errorNum[] = {0, 65, 67, 68, 69, 35, 32};   // Not numbers
 
 char score1[100], score2[100];
 int computer = 0, player = 0;
@@ -148,61 +151,92 @@ int PressTimes(){
 }
 
 void PlayGame1(){
-    int bot_input = random(1, 4);
-    int player_input;
+    // int bot_input = random(1, 4);
+    int player1_input, player2_input;
     String outcome;
 
-    int player_1 = 0, computer_1 = 0;
+    int player_1 = 0, player_2 = 0;
     char times1[20], times2[20];
 
     int num = PressTimes();
     int flag = 0;
     int res = 0;
-    
+    int n = 0;
 
+    if(num == 3)
+        n = 2;
+    if(num == 5)
+        n = 3;
+    if(num == 7)
+        n = 4;
+    if(num == 9)
+        n = 5;
     for(int i = 1; i <= num; i++){
         while(true){
-            if(digitalRead(rock) == LOW){
-                player_input = 1;
+            if(digitalRead(rock_1) == LOW){
+                player2_input = 1;
+                digitalWrite(green, HIGH);
+                delay(1000);
+                digitalWrite(green, LOW);
                 break;
             }
-            if(digitalRead(paper) == LOW){
-                player_input = 2;
+            if(digitalRead(paper_1) == LOW){
+                player2_input = 2;
+                digitalWrite(green, HIGH);
+                delay(1000);
+                digitalWrite(green, LOW);
                 break;
             }
-            if(digitalRead(scissors) == LOW){
-                player_input = 3;
+            if(digitalRead(scissors_1) == LOW){
+                player2_input = 3;
+                digitalWrite(green, HIGH);
+                delay(1000);
+                digitalWrite(green, LOW);
                 break;
             }
         }
-        if(player_input == 1){
-            if(bot_input == 1){
+        while(true){
+            if(digitalRead(rock) == LOW){
+                player1_input = 1;
+                break;
+            }
+            if(digitalRead(paper) == LOW){
+                player1_input = 2;
+                break;
+            }
+            if(digitalRead(scissors) == LOW){
+                player1_input = 3;
+                break;
+            }
+        }
+        if(player1_input == 1){
+            if(player2_input == 1){
                 outcome = "withdraw";
             }
-            if(bot_input == 2){
+            if(player2_input == 2){
                 outcome = "lose";
             }
-            if(bot_input == 3){
+            if(player2_input == 3){
                 outcome = "win";
             }
-        }else if(player_input == 2){
-            if(bot_input == 1){
+        }else if(player1_input == 2){
+            if(player2_input == 1){
                 outcome = "win";
             }
-            if(bot_input == 2){
+            if(player2_input == 2){
                 outcome = "withdraw";
             }
-            if(bot_input == 3){
+            if(player2_input == 3){
                 outcome = "lose";
             }
         }else{
-            if(bot_input == 1){
+            if(player2_input == 1){
                 outcome = "lose";
             }
-            if(bot_input == 2){
+            if(player2_input == 2){
                 outcome = "win";
             }
-            if(bot_input == 3){
+            if(player2_input == 3){
                 outcome = "withdraw";
             }
         }
@@ -218,7 +252,7 @@ void PlayGame1(){
             tone(SPEAKER_PIN, 262);
             delay(1000);
             digitalWrite(red, LOW);
-            computer_1++;
+            player_2++;
         }
         else{
             digitalWrite(yellow, HIGH);
@@ -230,39 +264,25 @@ void PlayGame1(){
         String name[] = {"Rock", "Paper", "Scissors"};
         lcd.clear();
         lcd.setCursor(0, 0);
-        lcd.print("Input:");
-        lcd.print(name[player_input - 1]);
+        lcd.print("You:");
+        lcd.print(name[player1_input - 1]);
         lcd.setCursor(0, 1);
-        lcd.print("Outcome:");
-        lcd.print(outcome);
+        lcd.print("Admin:");
+        lcd.print(name[player2_input - 1]);
+        // lcd.print("Outcome:");
+        // lcd.print(outcome);
         noTone(SPEAKER_PIN);
         delay(1000);
-        Serial.println(player_1);
-        Serial.println(computer_1);
-        if(num == 3){
-            flag = 1;
+        // Serial.println(player_1);
+        // Serial.println(player_2);
+        if(player_1 >= n){
+            res = 1;
+            break;
         }
-        if(num == 5){
-            flag = 2;
+        else if(player_2 >= n){
+            res = 2;
+            break;
         }
-        if(num == 7){
-            flag = 3;
-        }
-        if(num == 9){
-            flag = 4;
-        }
-    }
-    if(flag == 1){
-        player_1 > computer_1 ? res = 1 : res = 2;
-    }
-    else if(flag == 2){
-        player_1 > computer_1 ? res = 1 : res = 2;
-    }
-    else if(flag == 3){
-        player_1 > computer_1 ? res = 1 : res = 2;
-    }
-    else{
-        player_1 > computer_1 ? res = 1 : res = 2;
     }
     lcd.clear();
     lcd.setCursor(3, 0);
@@ -274,15 +294,15 @@ void PlayGame1(){
         lcd.print("You Lose!!");
         com++;
     }
-    delay(2000);
+    delay(1500);
     lcd.clear();
     lcd.setCursor(0, 0);
-    sprintf(times1, "Player:%d", pla);
+    sprintf(times1, "You:%d", pla);
     lcd.print(times1);
     lcd.setCursor(0, 1);
-    sprintf(times2, "Computer:%d", com);
+    sprintf(times2, "Admin:%d", com);
     lcd.print(times2);
-    delay(3000);
+    delay(2000);
 }
 
 /******************************************** Guess the number ********************************************/
@@ -1109,6 +1129,10 @@ void setup(){
     pinMode(upButton, INPUT_PULLUP);    // rock
     pinMode(selectButton, INPUT_PULLUP);  //scissors && game5button
     pinMode(downButton, INPUT_PULLUP);  // paper
+
+    pinMode(rock_1, INPUT_PULLUP);
+    pinMode(paper_1, INPUT_PULLUP);
+    pinMode(scissors_1, INPUT_PULLUP);
 
     randomSeed(analogRead(0));
 
